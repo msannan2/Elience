@@ -17,6 +17,10 @@
 
     </style>
 
+    <style name="Pinkish" parent="ThemeOverlay.AppCompat.Light">
+        <item name="colorAccent">#DA5A5B</item>
+    </style>
+
     <style name="AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
