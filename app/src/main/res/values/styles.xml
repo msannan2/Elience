@@ -17,7 +17,7 @@
 
     </style>
 
-    <style name="Pinkish" parent="ThemeOverlay.AppCompat.Light">
+    <style name="Pinkish" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="colorAccent">#DA5A5B</item>
     </style>
 
@@ -27,6 +27,8 @@
     </style>
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="AlertDialog" parent="Base.Theme.AppCompat.Dialog" />
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 

@@ -1,10 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#FF4081</color>
     <color name="bg_clolor">#FAFAFA</color>
-    <color name="black">#000000</color>
-    <color name="white">#ffffff</color>
     <color name="Pinkish">#DA5A5B</color>
+    <color name="colorPrimary">#008577</color>
+    <color name="colorPrimaryDark">#00574B</color>
+    <color name="colorAccent">#D81B60</color>
+    <color name="white">#FFFFFF</color>
+    <color name="cardColorDark">#23282d</color>
+    <color name="cardColorLight">#3b444c</color>
+    <color name="black">#000000</color>
+    <color name="blueVoteUp">#1e90ff</color>
+    <color name="redVoteDown">#dc143c</color>
 </resources>
