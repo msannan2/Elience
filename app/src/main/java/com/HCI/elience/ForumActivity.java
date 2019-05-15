@@ -11,6 +11,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,9 +29,9 @@ import com.shreyaspatil.firebase.recyclerpagination.DatabasePagingOptions;
 import com.shreyaspatil.firebase.recyclerpagination.FirebaseRecyclerPagingAdapter;
 import com.shreyaspatil.firebase.recyclerpagination.LoadingState;
 
-import static com.example.forumapp.QuestionDetailActivity.QUESTION_KEY;
+import static com.HCI.elience.QuestionDetailActivity.QUESTION_KEY;
 
-public class FourmActivity extends AppCompatActivity {
+public class ForumActivity extends AppCompatActivity {
 
     public static final int BLUE_VOTE_UP_COLOR = Color.rgb(30, 144, 255);
     public static final int RED_VOTE_DOWN_COLOR = Color.rgb(220, 20, 60);
@@ -46,8 +47,8 @@ public class FourmActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-
+        setContentView(R.layout.activity_forum);
+        getWindow().setStatusBarColor(Color.BLACK);
         mSwipeRefreshLayout = findViewById(R.id.swipe_refresh_layout);
 
         // Initialize RecyclerView
@@ -116,7 +117,7 @@ public class FourmActivity extends AppCompatActivity {
                 holder.cardView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        Intent intent = new Intent(FourmActivity.this, QuestionDetailActivity.class);
+                        Intent intent = new Intent(ForumActivity.this, QuestionDetailActivity.class);
                         intent.putExtra(QUESTION_KEY, model);
                         startActivityForResult(intent, REQUEST_CODE_1);
                     }
@@ -246,7 +247,7 @@ public class FourmActivity extends AppCompatActivity {
 
     // Dialog to add new questions
     private void showQuestionCreateDialog() {
-        AlertDialog.Builder mDialog = new AlertDialog.Builder(FourmActivity.this);
+        AlertDialog.Builder mDialog = new AlertDialog.Builder(ForumActivity.this);
         // Get the layout inflater
         LayoutInflater inflater = getLayoutInflater();
 
@@ -262,17 +263,19 @@ public class FourmActivity extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
                         String questionTxt = mQuestionEditText.getText().toString().trim();
-                        Question question = new Question(questionTxt);
-                        mDatabase.push().
-                                setValue(question).
-                                addOnSuccessListener(new OnSuccessListener<Void>() {
-                                    @Override
-                                    public void onSuccess(Void aVoid) {
-                                        Toast.makeText(FourmActivity.this, "Successfully created", Toast.LENGTH_SHORT).show();
-                                        // mAdapter.
-                                    }
-                                });
+                        if (!TextUtils.isEmpty(questionTxt) && ProfanityChecker.CheckforProfanity(questionTxt)) {
+                            Question question = new Question(questionTxt);
+                            mDatabase.push().
+                                    setValue(question).
+                                    addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        @Override
+                                        public void onSuccess(Void aVoid) {
+                                            Toast.makeText(ForumActivity.this, "Successfully created", Toast.LENGTH_SHORT).show();
+                                            // mAdapter.
+                                        }
+                                    });
 
+                        }
                     }
                 })
                 .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {

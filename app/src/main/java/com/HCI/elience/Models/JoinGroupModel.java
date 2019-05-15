@@ -1,4 +1,4 @@
-package com.HCI.elience;
+package com.HCI.elience.models;
 
 public class JoinGroupModel {
     public String groupName;

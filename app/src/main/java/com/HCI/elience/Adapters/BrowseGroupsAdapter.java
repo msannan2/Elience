@@ -1,4 +1,4 @@
-package com.HCI.elience;
+package com.HCI.elience.adapters;
 
 import android.content.Context;
 import android.content.Intent;
@@ -7,21 +7,20 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.HCI.elience.activities.ChatActivity;
 import com.HCI.elience.activities.GroupChatActivity;
-import com.HCI.elience.activities.LoginActivity;
+import com.HCI.elience.models.JoinGroupModel;
+import com.HCI.elience.R;
 import com.HCI.elience.activities.MainActivity;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class BrowseGroupsAdapter extends RecyclerView.Adapter {
     private static final int VIEW_TYPE_MESSAGE_SENT = 1;
@@ -98,9 +97,9 @@ public class BrowseGroupsAdapter extends RecyclerView.Adapter {
 
 
                         FirebaseDatabase.getInstance().getReference().child("Users").child(currentUser).child("Usergroups").child(group.groupName).updateChildren(data);
-                        Intent i=new Intent(mContext,MainActivity.class);
-                        i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        mContext.startActivity(i);
+                        Intent groupChatIntent = new Intent(mContext, GroupChatActivity.class);
+                        groupChatIntent.putExtra("groupName", group.groupName);
+                        mContext.startActivity(groupChatIntent);
                     }
                 });
             }

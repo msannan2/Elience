@@ -1,4 +1,4 @@
-package com.HCI.elience;
+package com.HCI.elience.activities;
 
 import android.app.DatePickerDialog;
 import android.content.Intent;
@@ -16,12 +16,11 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
-import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.HCI.elience.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.common.hash.HashCode;
@@ -31,8 +30,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.type.Date;
 
 import java.nio.charset.Charset;
 import java.util.ArrayList;
@@ -178,7 +175,7 @@ public class SignupActivity extends AppCompatActivity {
                 final String Username=username.getText().toString().trim();
                 final String Gender=gender.getSelectedItem().toString().trim();
                 final String DOB=dob.getText().toString().trim();
-              /*  if (TextUtils.isEmpty(Email)) {
+               if (TextUtils.isEmpty(Email)) {
                     error.setText("Enter email address");
                     return;
                 }
@@ -190,7 +187,7 @@ public class SignupActivity extends AppCompatActivity {
                 if (TextUtils.isEmpty(Password)) {
                     error.setText("Enter a password");
                     return;
-                }*/
+                }
 
 
                 progressBar.setVisibility(View.VISIBLE);
@@ -219,13 +216,13 @@ public class SignupActivity extends AppCompatActivity {
                                     user.put("gender", Gender);
                                     user.put("dob",DOB);
 
-                                    dbRef.child("users").child(userAuth.getCurrentUser().getUid()).setValue(user).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    dbRef.child("Users").child(userAuth.getCurrentUser().getUid()).setValue(user).addOnCompleteListener(new OnCompleteListener<Void>() {
                                         @Override
                                         public void onComplete(@NonNull Task<Void> task) {
                                             if(task.isSuccessful())
                                             {
                                                 Toast.makeText(SignupActivity.this,"Account created successfully",Toast.LENGTH_SHORT);
-
+                                                gotoMain();
                                             }
                                             else{
                                                 Toast.makeText(SignupActivity.this,task.getException().toString(),Toast.LENGTH_SHORT);
@@ -243,15 +240,6 @@ public class SignupActivity extends AppCompatActivity {
             }
         });
     }
-    public Emitter.Listener startActivity = new Emitter.Listener() {
-        @Override
-        public void call(Object... args) {
-            AppSocketListener.getInstance().off(SocketEventConstants.registerResponse);
-            Intent intent = new Intent(SignupActivity.this, LoginActivity.class);
-            startActivity(intent);
-            finish();
-        }
-    };
     @Override
     protected void onResume() {
         super.onResume();
@@ -265,7 +253,7 @@ public class SignupActivity extends AppCompatActivity {
 
     void gotoMain()
     {
-        Intent i=new Intent(SignupActivity.this,MenuActivity.class);
+        Intent i=new Intent(SignupActivity.this,MainActivity.class);
         i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(i);
         finish();

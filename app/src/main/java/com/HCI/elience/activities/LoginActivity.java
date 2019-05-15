@@ -1,33 +1,26 @@
-package com.HCI.elience;
+package com.HCI.elience.activities;
 
-import android.content.Context;
 import android.content.Intent;
-import android.os.Debug;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.text.InputType;
-import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import com.HCI.elience.R;
+import com.HCI.elience.utils.validator;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseAuthInvalidUserException;
-import com.google.firebase.auth.FirebaseUser;
 
 import customfonts.EditText__SF_Pro_Display_Medium;
-import customfonts.TextView_Helvetica_Neue_bold;
-import io.socket.emitter.Emitter;
 
 
 /**
@@ -83,12 +76,7 @@ public class LoginActivity extends AppCompatActivity {
                                     // there was an error
                                     authError.setVisibility(View.VISIBLE);
                                 } else {
-                                    String temp=SocketEventConstants.loginResponse;
-                                    Emitter.Listener e= AppContext.getEmitterListeners().onLogin;
-                                    AppSocketListener.getInstance().addOnHandler(temp,e);
-                                    AppSocketListener.getInstance().addOnHandler(SocketEventConstants.loginResponse, startActivity);
-                                    AppSocketListener.getInstance().emit(SocketEventConstants.login, userAuth.getCurrentUser().getUid(), email);
-
+                                        gotoMain();
                                 }
                             }
                         });
@@ -143,20 +131,10 @@ public class LoginActivity extends AppCompatActivity {
 
     void gotoMain()
     {
-        Intent i=new Intent(LoginActivity.this,MenuActivity.class);
+        Intent i=new Intent(LoginActivity.this,MainActivity.class);
         i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(i);
         finish();
     }
-    public Emitter.Listener startActivity = new Emitter.Listener() {
-        @Override
-        public void call(Object... args) {
-            AppSocketListener.getInstance().off(SocketEventConstants.loginResponse);
-            Intent intent = new Intent(LoginActivity.this, MenuActivity.class);
-            Toast.makeText(getApplicationContext(), "Activity Started", Toast.LENGTH_SHORT).show();
-            Log.e("Activity","Activity Started");
-            startActivity(intent);
-            finish();
-        }
-    };
+
 }

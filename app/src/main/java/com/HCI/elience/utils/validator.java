@@ -1,4 +1,4 @@
-package com.HCI.elience;
+package com.HCI.elience.utils;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;

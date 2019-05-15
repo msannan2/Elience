@@ -1,4 +1,4 @@
-package com.HCI.elience;
+package com.HCI.elience.adapters;
 
 import android.content.Context;
 import android.content.Intent;
@@ -10,8 +10,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.HCI.elience.models.GroupsModel;
+import com.HCI.elience.R;
 import com.HCI.elience.activities.GroupChatActivity;
-import com.HCI.elience.activities.MainActivity;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.text.SimpleDateFormat;

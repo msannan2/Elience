@@ -8,9 +8,11 @@ import android.support.v4.app.FragmentPagerAdapter;
 import com.HCI.elience.fragments.ChatFragment;
 import com.HCI.elience.fragments.GroupsFragment;
 import com.HCI.elience.fragments.MenuFragment;
+import com.HCI.elience.fragments.MenuFragmentTH;
+import com.HCI.elience.fragments.QuestionsFragment;
 
-public class TabsAccessorAdapter extends FragmentPagerAdapter {
-    public TabsAccessorAdapter(FragmentManager fm) {
+public class THTabsAccessorAdapter extends FragmentPagerAdapter {
+    public THTabsAccessorAdapter(FragmentManager fm) {
         super(fm);
     }
 
@@ -18,11 +20,11 @@ public class TabsAccessorAdapter extends FragmentPagerAdapter {
     public Fragment getItem(int i) {
         switch (i) {
             case 0:
-                MenuFragment menuFragment = new MenuFragment();
+                MenuFragmentTH menuFragment = new MenuFragmentTH();
                 return menuFragment;
             case 1:
-                ChatFragment chatsFragment = new ChatFragment();
-                return chatsFragment;
+                QuestionsFragment questionsFragment = new QuestionsFragment();
+                return questionsFragment;
             case 2:
                 GroupsFragment groupsFragment = new GroupsFragment();
                 return groupsFragment;
@@ -45,7 +47,7 @@ public class TabsAccessorAdapter extends FragmentPagerAdapter {
             case 0:
                 return "Menu";
             case 1:
-                return "My Chats";
+                return "My Questions";
             case 2:
                 return "My Groups";
 

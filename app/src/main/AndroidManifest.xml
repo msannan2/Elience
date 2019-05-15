@@ -2,21 +2,30 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.HCI.elience">
     <!-- To auto-complete the email text field in the login form with the user's emails -->
-    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
-    <uses-permission android:name="android.permission.READ_PROFILE" />
+
+
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
-        android:name="com.HCI.elience.AppContext"
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/elience_icon"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@mipmap/elience_icon_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".MenuActivity"
-            android:label="@string/title_activity_menu"
+            android:name=".activities.AskQuestionActivity"
+            android:label="Elience"
+            android:theme="@style/AppTheme.NoActionBar">
+        </activity>
+        <activity android:name=".activities.GroupChatActivity"
+            android:label="Elience">
+        </activity>
+        <activity android:name=".activities.BrowseGroupsActivity" android:label="Elience">
+        </activity>
+        <activity
+            android:name=".activities.MainActivity"
+            android:label="Elience"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -25,33 +34,23 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ChatActivity"
-            android:label="@string/title_activity_chat"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".SignupActivity" />
-        <activity
-            android:name=".LoginActivity"
-            android:label="@string/app_name">
+            android:name=".activities.ChatActivity"
+            android:label="Elience"
+            android:theme="@style/AppTheme.NoActionBar">
         </activity>
-        <!-- Our ContentProvider -->
-        <provider
-            android:name="DatabaseProvider"
-            android:authorities="com.HCI.elience"
-            android:exported="false" />
 
-        <service android:name="SocketIOService">
-            <intent-filter>
-                <action android:name="com.lei.mykha.chatapp.activities.socketioservice.SocketIOService"></action>
-            </intent-filter>
-        </service>
+        <activity android:name=".activities.SignupActivity" />
+        <activity android:name=".ForumActivity" />
+        <activity
+            android:name=".activities.LoginActivity"
+            android:label="@string/app_name">
 
+        </activity>
+        <activity android:name=".QuestionDetailActivity">
+        </activity>
+        <activity android:name=".activities.THChatActivity">
+        </activity>
 
-
-        <receiver android:name="BootReceiver">
-            <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED" />
-            </intent-filter>
-        </receiver>
     </application>
 
 </manifest>

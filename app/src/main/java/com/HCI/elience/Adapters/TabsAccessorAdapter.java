@@ -1,4 +1,4 @@
-package com.HCI.elience;
+package com.HCI.elience.adapters;
 
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;

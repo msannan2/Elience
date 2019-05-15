@@ -1,4 +1,6 @@
-package com.example.forumapp;
+package com.HCI.elience;
+
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -14,7 +16,7 @@ public class Answer {
 
     public Answer(String title) {
         this.title = title;
-        this.userId = "69"; // get current user here
+        this.userId = FirebaseAuth.getInstance().getCurrentUser().getUid(); // get current user here
         this.createdOn = new Date().toString();
     }
 

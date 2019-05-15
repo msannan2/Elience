@@ -107,14 +107,18 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
-            android:background="@color/white"
+            android:background="@android:color/transparent"
             android:orientation="horizontal">
 
             <EditText
                 android:id="@+id/question_detail_edit_text_answer"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_weight="9"
+                android:padding="8dp"
+                android:textColor="@color/white"
+                android:textColorHint="@color/white"
+                android:background="@drawable/rounded_rect"
                 android:hint="Answer" />
 
             <Button

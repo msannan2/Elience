@@ -1,4 +1,4 @@
-package com.HCI.elience;
+package com.HCI.elience.adapters;
 
 import android.content.Context;
 import android.content.Intent;
@@ -10,8 +10,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.HCI.elience.activities.ChatActivity;
+import com.HCI.elience.models.GroupsModel;
+import com.HCI.elience.R;
 import com.HCI.elience.activities.GroupChatActivity;
-import com.HCI.elience.activities.MainActivity;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.text.SimpleDateFormat;
@@ -43,7 +45,7 @@ public class MyChatsAdapter extends RecyclerView.Adapter<MyChatsAdapter.ViewHold
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder viewHolder, int i) {
         final GroupsModel groupsModel = mData.get(i);
-        viewHolder.groupName.setText(groupsModel.groupName);
+        viewHolder.groupName.setText(groupsModel.groupID);
         viewHolder.lastMessage.setText(groupsModel.lastMessage);
         viewHolder.date.setText(groupsModel.date);
 
@@ -74,7 +76,7 @@ public class MyChatsAdapter extends RecyclerView.Adapter<MyChatsAdapter.ViewHold
 
                 FirebaseDatabase.getInstance().getReference().child("Users").child(currentUser).child("Userchats").child(groupsModel.groupName).updateChildren(data);
                 viewHolder.unreadCount.setVisibility(View.GONE);
-                Intent groupChatIntent = new Intent(mContext, GroupChatActivity.class);
+                Intent groupChatIntent = new Intent(mContext, ChatActivity.class);
                 groupChatIntent.putExtra("groupName", groupsModel.groupName);
                 groupChatIntent.putExtra("groupID",groupsModel.groupID);
                 mContext.startActivity(groupChatIntent);

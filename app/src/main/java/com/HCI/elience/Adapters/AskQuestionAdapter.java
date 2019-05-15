@@ -1,4 +1,4 @@
-package com.HCI.elience;
+package com.HCI.elience.adapters;
 
 import android.content.Context;
 import android.content.Intent;
@@ -8,10 +8,10 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.TextView;
 
-import com.HCI.elience.JoinGroupModel;
+import com.HCI.elience.activities.ChatActivity;
+import com.HCI.elience.models.JoinGroupModel;
 import com.HCI.elience.R;
 import com.HCI.elience.activities.MainActivity;
 import com.google.firebase.database.FirebaseDatabase;
@@ -44,7 +44,7 @@ public class AskQuestionAdapter extends RecyclerView.Adapter {
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view;
         view = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.browse_group_item, parent, false);
+                    .inflate(R.layout.ask_question_item, parent, false);
 
 
         return new BrowseGroupsHolder(view);
@@ -54,6 +54,7 @@ public class AskQuestionAdapter extends RecyclerView.Adapter {
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         final JoinGroupModel group = (JoinGroupModel) mGroupsList.get(position);
+        ((BrowseGroupsHolder)holder).groupName.setText(group.groupID);
         ((BrowseGroupsHolder)holder).cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -68,12 +69,14 @@ public class AskQuestionAdapter extends RecyclerView.Adapter {
 
                 data.put("timestamp",System.currentTimeMillis());
                 data.put("date",currentDate+" "+currentTime);
+                data.put("name",group.groupID);
 
 
                 FirebaseDatabase.getInstance().getReference().child("Users").child(currentUser).child("Userchats").child(group.groupName).updateChildren(data);
-                Intent i=new Intent(mContext,MainActivity.class);
-                i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                mContext.startActivity(i);
+                Intent groupChatIntent = new Intent(mContext, ChatActivity.class);
+                groupChatIntent.putExtra("groupName", group.groupName);
+                groupChatIntent.putExtra("groupID",group.groupID);
+                mContext.startActivity(groupChatIntent);
             }
         });
     }

@@ -5,11 +5,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.WindowManager;
 
-import com.HCI.elience.BrowseGroupsAdapter;
-import com.HCI.elience.JoinGroupModel;
-import com.HCI.elience.MessageListAdapter;
+import com.HCI.elience.adapters.BrowseGroupsAdapter;
+import com.HCI.elience.models.JoinGroupModel;
 import com.HCI.elience.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -23,7 +24,7 @@ import java.util.List;
 
 import customfonts.EditText__SF_Pro_Display_Medium;
 
-public class BrowseGroups extends AppCompatActivity {
+public class BrowseGroupsActivity extends AppCompatActivity {
 
     private EditText__SF_Pro_Display_Medium searchBar;
     private RecyclerView groupsRecycler;
@@ -46,6 +47,54 @@ public class BrowseGroups extends AppCompatActivity {
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         groupsRecycler.setLayoutManager(layoutManager);
         groupsRecycler.setAdapter(groupsAdapter);
+        DatabaseReference ref=FirebaseDatabase.getInstance().getReference().child("Groups");
+        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                joinGroupModelList.clear();
+                for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                    joinGroupModelList.add(new JoinGroupModel(ds.getKey(),null));
+                }
+                groupsAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+        searchBar.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                DatabaseReference ref=FirebaseDatabase.getInstance().getReference().child("Groups");
+                String query=searchBar.getText().toString().trim();
+                ref.orderByKey().startAt(query).endAt(query+"\uf8ff").addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        joinGroupModelList.clear();
+                        for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                            joinGroupModelList.add(new JoinGroupModel(ds.getKey(),null));
+                        }
+                        groupsAdapter.notifyDataSetChanged();
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+            }
+        });
 
     }
 

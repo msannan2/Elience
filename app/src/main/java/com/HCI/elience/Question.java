@@ -1,8 +1,9 @@
-package com.example.forumapp;
+package com.HCI.elience;
 
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.Exclude;
 
 import java.text.SimpleDateFormat;
@@ -10,7 +11,7 @@ import java.util.Date;
 
 public class Question implements Parcelable {
 
-    public static final Parcelable.Creator CREATOR = new Parcelable.Creator() {
+    public static final Creator CREATOR = new Creator() {
         public Question createFromParcel(Parcel in) {
             return new Question(in);
         }
@@ -47,7 +48,7 @@ public class Question implements Parcelable {
 
     public Question(String title) {
         this.title = title;
-        this.userId = "69"; // get current user here FirebaseAuth.getFALANA();
+        this.userId = FirebaseAuth.getInstance().getCurrentUser().getUid(); // get current user here FirebaseAuth.getFALANA();
         this.createdOn = new Date().toString();
         this.votedDownByUser = 0;
         this.votedDownByUser = 0;

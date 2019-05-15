@@ -6,5 +6,5 @@
         <!--android:right="13dp"-->
         <!--android:bottom="9dp" />-->
     <corners android:radius="30dp" />
-    <solid android:color="#f6f6f6" />
+    <solid android:color="@color/common_google_signin_btn_text_light_focused" />
 </shape>

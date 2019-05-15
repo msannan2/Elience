@@ -1,4 +1,4 @@
-package com.HCI.elience;
+package com.HCI.elience.adapters;
 
 import android.content.Context;
 import android.content.Intent;
@@ -10,8 +10,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.HCI.elience.activities.ChatActivity;
+import com.HCI.elience.activities.THChatActivity;
+import com.HCI.elience.models.GroupsModel;
+import com.HCI.elience.R;
 import com.HCI.elience.activities.GroupChatActivity;
-import com.HCI.elience.activities.MainActivity;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.text.SimpleDateFormat;
@@ -71,10 +74,11 @@ public class MyQuestionsAdapter extends RecyclerView.Adapter<MyQuestionsAdapter.
                 data.put("timestamp",System.currentTimeMillis());
                 data.put("date",currentDate+" "+currentTime);
 
-                FirebaseDatabase.getInstance().getReference().child("Therapists").child(currentUser).child(groupsModel.groupName).updateChildren(data);
+                FirebaseDatabase.getInstance().getReference().child("Therapists").child(currentUser).child("Questions").child(groupsModel.groupName).updateChildren(data);
                 viewHolder.unreadCount.setVisibility(View.GONE);
-                Intent groupChatIntent = new Intent(mContext, GroupChatActivity.class);
-                groupChatIntent.putExtra("groupName", groupsModel.groupName);
+                Intent groupChatIntent = new Intent(mContext, THChatActivity.class);
+                groupChatIntent.putExtra("groupName", String.valueOf(groupsModel.groupName));
+                groupChatIntent.putExtra("groupID",String.valueOf(groupsModel.groupID));
                 mContext.startActivity(groupChatIntent);
             }
         });

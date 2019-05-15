@@ -1,14 +1,16 @@
-package com.example.forumapp;
+package com.HCI.elience;
 
 import android.arch.paging.PagedList;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,10 +28,9 @@ import com.shreyaspatil.firebase.recyclerpagination.DatabasePagingOptions;
 import com.shreyaspatil.firebase.recyclerpagination.FirebaseRecyclerPagingAdapter;
 import com.shreyaspatil.firebase.recyclerpagination.LoadingState;
 
-import static com.example.forumapp.MainActivity.BLUE_VOTE_UP_COLOR;
-import static com.example.forumapp.MainActivity.RED_VOTE_DOWN_COLOR;
-import static com.example.forumapp.MainActivity.USER_ID;
-
+import static com.HCI.elience.ForumActivity.BLUE_VOTE_UP_COLOR;
+import static com.HCI.elience.ForumActivity.RED_VOTE_DOWN_COLOR;
+import static com.HCI.elience.ForumActivity.USER_ID;
 
 public class QuestionDetailActivity extends AppCompatActivity {
 
@@ -55,7 +56,7 @@ public class QuestionDetailActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_question_detail);
-
+        getWindow().setStatusBarColor(Color.BLACK);
         mSwipeRefreshLayout = findViewById(R.id.swipe_refresh_layout_question_detail);
 
         // Initialize RecyclerView
@@ -247,6 +248,11 @@ public class QuestionDetailActivity extends AppCompatActivity {
 
         if (answerText.isEmpty()) {
             answerEditText.setError("Answer can't be empty");
+            return;
+        }
+        if(!ProfanityChecker.CheckforProfanity(answerText))
+        {
+            answerEditText.setError("Profanity Detected ! Please keep this Forum clean.");
             return;
         }
 

@@ -4,10 +4,10 @@ import android.graphics.Color;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -16,11 +16,13 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.HCI.elience.ProfanityChecker;
+import com.HCI.elience.R;
 import com.HCI.elience.adapters.MessageListAdapter;
 import com.HCI.elience.models.MessageModel;
-import com.HCI.elience.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -36,7 +38,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
-public class ChatActivity extends AppCompatActivity {
+public class THChatActivity extends AppCompatActivity {
     private Toolbar mToolbar;
     private ImageButton sendMessageBtn;
     private EditText userInput;
@@ -44,6 +46,7 @@ public class ChatActivity extends AppCompatActivity {
     private TextView headerText;
     private ImageButton backButton;
     private MessageListAdapter mMessageAdapter;
+    private ProgressBar progressBar;
     private DatabaseReference userRef, groupsRef, groupMessageKeyRef;
     private String currentGroupName, currentUserID, currentUserName, currentDate, currentTime,currentGroupID;
     private List<MessageModel> messageList = new ArrayList<MessageModel>();
@@ -53,11 +56,13 @@ public class ChatActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_group_chat);
         getWindow().setStatusBarColor(Color.BLACK);
-        currentGroupName = getIntent().getExtras().get("groupName").toString();
-        currentGroupID = getIntent().getExtras().get("groupID").toString();
+        progressBar=findViewById(R.id.progressBar3);
+        progressBar.setVisibility(View.VISIBLE);
+        currentGroupName = getIntent().getStringExtra("groupName");
+        currentGroupID = getIntent().getStringExtra("groupID");
         currentUserID = FirebaseAuth.getInstance().getCurrentUser().getUid();
         userRef = FirebaseDatabase.getInstance().getReference().child("Users");
-        groupsRef = FirebaseDatabase.getInstance().getReference().child("Therapists").child(currentGroupName).child(currentUserID).child("chats");
+        groupsRef = FirebaseDatabase.getInstance().getReference().child("Therapists").child(currentUserID).child("Questions").child(currentGroupName).child("chats");
         //setTransparency();
         Initialize();
         GetUserInfo();
@@ -73,7 +78,12 @@ public class ChatActivity extends AppCompatActivity {
         groupsRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                DisplayAllMessages(dataSnapshot);
+                //DisplayAllMessages(dataSnapshot);
+                if(dataSnapshot.getValue()==null)
+                {
+                    //DisplayAllMessages(dataSnapshot);
+                    progressBar.setVisibility(View.INVISIBLE);
+                }
             }
 
             @Override
@@ -88,13 +98,53 @@ public class ChatActivity extends AppCompatActivity {
             }
 
         });
+
+        messageList.clear();
+        groupsRef.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                if (dataSnapshot.exists()) {
+                    DisplayMessages(dataSnapshot);
+                    UpdateLastSeen();
+                    playNotification();
+                    progressBar.setVisibility(View.INVISIBLE);
+                }
+
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                if (dataSnapshot.exists()) {
+                    DisplayMessages(dataSnapshot);
+                    UpdateLastSeen();
+                    playNotification();
+                    progressBar.setVisibility(View.INVISIBLE);
+                }
+
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 
     private void SaveMessagetoDB() {
         String message = userInput.getText().toString();
 
-        if (!TextUtils.isEmpty(message)) {
-            DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("Therapists").child(currentGroupName).child("chats");
+        if (!TextUtils.isEmpty(message) && ProfanityChecker.CheckforProfanity(message)) {
+            DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("Therapists").child(currentUserID).child("Questions").child(currentGroupName).child("chats");
             String messageKey = ref.push().getKey();
             Calendar calForDate = Calendar.getInstance();
             SimpleDateFormat currentDateFormat = new SimpleDateFormat("MMM dd, yyyy");
@@ -167,41 +217,7 @@ public class ChatActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        groupsRef.addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                if (dataSnapshot.exists()) {
-                    DisplayMessages(dataSnapshot);
-                    UpdateLastSeen();
-                    playNotification();
 
-                }
-            }
-
-            @Override
-            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                if (dataSnapshot.exists()) {
-                    DisplayMessages(dataSnapshot);
-                    UpdateLastSeen();
-                    playNotification();
-                }
-            }
-
-            @Override
-            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
     }
 
    /* @Override
@@ -254,7 +270,7 @@ public class ChatActivity extends AppCompatActivity {
         data.put("timestamp", System.currentTimeMillis());
         data.put("date", currentDate + " " + currentTime);
 
-        FirebaseDatabase.getInstance().getReference().child("Users").child(currentUserID).child("Userchats").child(currentGroupName).updateChildren(data);
+        FirebaseDatabase.getInstance().getReference().child("Therapists").child(currentUserID).child("Questions").child(currentGroupName).updateChildren(data);
     }
 
     private void DisplayMessages(DataSnapshot dataSnapshot) {
@@ -279,6 +295,7 @@ public class ChatActivity extends AppCompatActivity {
 
     private void DisplayAllMessages(DataSnapshot dataSnapshot) {
         Iterator iterator2 = dataSnapshot.getChildren().iterator();
+        messageList.clear();
         while (iterator2.hasNext()) {
             HashMap<String, Object> value = (HashMap<String, Object>) ((DataSnapshot) iterator2.next()).getValue();
             String chatMessage = value.get("message").toString();
